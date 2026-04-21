@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelli & Passione — Piero Posteri</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F4EFE6;--dark:#1A1612;--mid:#6B6156;--light:#A09488;
+  --accent:#8B6F47;--accent2:#C4956A;--border:rgba(107,97,86,0.15);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);font-family:var(--sans);color:var(--dark);min-height:100vh}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(244,239,230,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-family:var(--serif);font-size:20px;font-weight:300;letter-spacing:0.1em;cursor:pointer}
+.nav-logo em{font-style:italic;color:var(--accent)}
+.nav-filters{display:flex;gap:4px}
+.nav-btn{padding:6px 18px;border-radius:20px;border:1px solid transparent;background:none;font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;color:var(--mid);transition:all 0.2s}
+.nav-btn:hover{color:var(--dark)}
+.nav-btn.active{background:var(--dark);color:var(--cream);border-color:var(--dark)}
+
+/* HERO */
+.hero{padding:64px 40px 48px;max-width:700px}
+.hero-label{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;font-weight:500}
+.hero-title{font-family:var(--serif);font-size:clamp(42px,6vw,72px);font-weight:300;line-height:1.05;color:var(--dark);margin-bottom:16px}
+.hero-title em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:14px;color:var(--mid);font-weight:300;line-height:1.8;max-width:480px}
+.hero-stats{display:flex;gap:40px;margin-top:40px;padding-top:32px;border-top:1px solid var(--border)}
+.stat-n{font-family:var(--serif);font-size:36px;font-weight:300;color:var(--dark);line-height:1}
+.stat-l{font-size:11px;color:var(--light);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px}
+
+/* GRID */
+.grid-section{padding:0 40px 80px}
+.section-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.section-hd h2{font-family:var(--serif);font-size:28px;font-weight:300}
+.section-count{font-size:12px;color:var(--light);letter-spacing:0.06em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2px}
+.card{background:var(--cream);cursor:pointer;overflow:hidden;border:1px solid var(--border);transition:border-color 0.2s}
+.card:hover{border-color:var(--accent2)}
+.card:hover .card-img-wrap{transform:scale(1.03)}
+.card:hover .card-real-img{transform:scale(1.03)}
+.card-img-outer{overflow:hidden;aspect-ratio:4/3;background:#E8E0D0;position:relative}
+.card-img-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;transition:transform 0.5s ease}
+.card-body{padding:16px 18px}
+.card-cat{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.card-name{font-family:var(--serif);font-size:20px;font-weight:400;line-height:1.2;color:var(--dark);margin-bottom:4px}
+.card-meta{font-size:11px;color:var(--light)}
+
+/* DETAIL VIEW */
+.detail{display:none;padding:0 40px 80px}
+.detail.active{display:block}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--mid);cursor:pointer;padding:16px 0 32px;letter-spacing:0.06em;text-transform:uppercase;font-weight:500;transition:color 0.2s;border:none;background:none;font-family:var(--sans)}
+.back-btn:hover{color:var(--dark)}
+.detail-inner{display:grid;grid-template-columns:1fr 400px;gap:0;border:1px solid var(--border)}
+.detail-gallery{padding:32px}
+.main-photo{aspect-ratio:4/3;background:#E8E0D0;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:90px;margin-bottom:12px;overflow:hidden;cursor:zoom-in;position:relative;user-select:none}
+.main-photo img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.main-photo:hover img{transform:scale(1.04)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap}
+.thumb{width:72px;height:54px;background:#DDD5C4;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s;flex-shrink:0}
+.thumb.active{border-color:var(--accent)}
+.detail-info{padding:36px 36px 36px 40px;border-left:1px solid var(--border)}
+.info-cat{font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.info-title{font-family:var(--serif);font-size:38px;font-weight:300;line-height:1.1;margin-bottom:6px}
+.info-epoch{font-size:13px;color:var(--mid);font-weight:300;margin-bottom:28px}
+.divider{height:1px;background:var(--border);margin-bottom:24px}
+.scheda-label{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--light);margin-bottom:14px}
+.scheda-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--border)}
+.scheda-row:last-child{border-bottom:none}
+.sk{font-size:12px;color:var(--mid);font-weight:300}
+.sv{font-size:13px;color:var(--dark);text-align:right}
+.desc-text{font-size:13px;color:var(--mid);line-height:1.85;font-weight:300;margin-top:8px}
+
+/* RELATED */
+.related{padding:48px 40px 80px;border-top:1px solid var(--border)}
+.related-hd{font-size:10px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--light);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.rel-card{cursor:pointer}
+.rel-photo{aspect-ratio:4/3;border-radius:2px;overflow:hidden;margin-bottom:10px}
+.rel-photo-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;background:#E0D8CC;transition:transform 0.3s}
+.rel-card:hover .rel-photo-inner{transform:scale(1.05)}
+.rel-cat{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:3px}
+.rel-name{font-family:var(--serif);font-size:17px;font-weight:400;color:var(--dark);line-height:1.2}
+.rel-meta{font-size:11px;color:var(--light);margin-top:2px}
+
+/* ZOOM */
+.zoom-ol{display:none;position:fixed;inset:0;background:rgba(20,15,10,0.94);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
+.zoom-ol.open{display:flex}
+.zoom-content{font-size:120px;max-width:88vw;max-height:88vh;display:flex;align-items:center;justify-content:center}
+.zoom-close{position:absolute;top:24px;right:32px;color:#fff;font-size:28px;cursor:pointer;opacity:.6;font-family:var(--sans);font-weight:300;background:none;border:none;line-height:1}
+
+/* FRECCE GALLERIA */
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;background:rgba(244,239,230,0.92);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--dark);transition:background 0.15s;z-index:10;user-select:none}
+.gallery-nav:hover{background:var(--cream)}
+.gallery-nav.prev{left:10px}
+.gallery-nav.next{right:10px}
+.img-counter{position:absolute;bottom:10px;right:12px;font-size:11px;color:var(--mid);background:rgba(244,239,230,0.85);padding:3px 9px;border-radius:10px;pointer-events:none}
+.video-thumb-wrap{position:relative;width:72px;height:54px;flex-shrink:0;cursor:pointer}
+.video-thumb-wrap .thumb{width:100%;height:100%;background:#1A1612;border:2px solid transparent;position:relative}
+.video-thumb-wrap.active .thumb{border-color:var(--accent)}
+.play-btn{position:absolute;top:50%;left:52%;transform:translate(-50%,-50%);width:0;height:0;border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent rgba(255,255,255,0.9);pointer-events:none}
+.vid-label{position:absolute;bottom:3px;right:5px;font-size:8px;color:rgba(255,255,255,0.6);font-weight:500;letter-spacing:0.05em;pointer-events:none}
+/* VIDEO EMBED */
+.video-frame{width:100%;aspect-ratio:16/9;border:none;border-radius:2px;display:none}
+.video-frame.active{display:block}
+/* TAB DESCRIZIONE */
+.desc-tabs-wrap{margin-top:20px}
+.tabs-bar{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab-btn{padding:10px 0;margin-right:24px;font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;color:var(--light);border:none;background:none;font-family:var(--sans);border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s;flex-shrink:0}
+.tab-btn.active{color:var(--dark);border-bottom-color:var(--dark)}
+.tab-pane{display:none;font-size:13px;color:var(--mid);line-height:1.85;font-weight:300;padding-top:16px}
+.tab-pane.active{display:block}
+/* BG colors by category */
+.bg-nave{background:#E2D8CA}
+.bg-navmil{background:#D4DADA}
+.bg-sbarco{background:#D8D4CC}
+.bg-loco{background:#D4CCC2}
+.bg-tram{background:#CCC8D4}
+
+@media(max-width:900px){
+  #news-view{padding-left:20px;padding-right:20px}
+  .detail-inner{grid-template-columns:1fr}
+  .detail-info{border-left:none;border-top:1px solid var(--border)}
+  .related-grid{grid-template-columns:repeat(2,1fr)}
+  .nav{padding:0 20px}
+  .hero,.grid-section,.detail,.related{padding-left:20px;padding-right:20px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo" onclick="showIndex()">Modelli <em>&amp;</em> Passione</div>
+  <div class="nav-filters">
+    <button class="nav-btn active" onclick="setFilter('tutti',this)">Tutti</button>
+    <button class="nav-btn" onclick="setFilter('nave_all',this)">Navi</button>
+    <button class="nav-btn" onclick="setFilter('treni',this)">Treni</button>
+    <button class="nav-btn" onclick="showNews(this)">News</button>
+  </div>
+</nav>
+
+<div id="index-view">
+  <div class="hero">
+    <div class="hero-label">Piero Posteri · Collezione personale</div>
+    <h1 class="hero-title">Modelli<br><em>&amp; Passione</em></h1>
+    <p class="hero-sub">Quasi settant'anni di modellismo navale e ferroviario. Navi storiche, incrociatori, mezzi da sbarco, locomotive a vapore — ogni modello è un frammento di storia dell'uomo.</p>
+    <div class="hero-stats">
+      <div><div class="stat-n" id="stat-tot">46</div><div class="stat-l">Modelli totali</div></div>
+      <div><div class="stat-n">~70</div><div class="stat-l">Anni di passione</div></div>
+      <div><div class="stat-n">1953</div><div class="stat-l">Prima costruzione</div></div>
+    </div>
+  </div>
+
+  <div class="grid-section">
+    <div class="section-hd">
+      <h2 id="grid-title">La collezione completa</h2>
+      <span class="section-count" id="grid-count">46 modelli</span>
+    </div>
+    <div class="grid" id="main-grid"></div>
+  </div>
+</div>
+
+<div id="detail-view">
+  <button class="back-btn" onclick="showIndex()">← Torna alla collezione</button>
+  <div class="detail-inner">
+    <div class="detail-gallery">
+      <div class="main-photo" id="d-main" onclick="openZoom()">
+        <div id="d-main-content" style="font-size:90px"></div>
+        <button class="gallery-nav prev" onclick="event.stopPropagation();navPhoto(-1)">&#8249;</button>
+        <button class="gallery-nav next" onclick="event.stopPropagation();navPhoto(1)">&#8250;</button>
+        <div class="img-counter" id="d-counter">1 / 1</div>
+      </div>
+      <iframe class="video-frame" id="d-video" allowfullscreen></iframe>
+      <div class="thumbs" id="d-thumbs"></div>
+    </div>
+    <div class="detail-info">
+      <div class="info-cat" id="d-cat"></div>
+      <h1 class="info-title" id="d-title"></h1>
+      <div class="info-epoch" id="d-epoch"></div>
+      <div class="divider"></div>
+      <div class="scheda-label">Scheda tecnica</div>
+      <div id="d-scheda"></div>
+      <div class="desc-tabs-wrap">
+        <div class="tabs-bar" id="d-tabs-bar"></div>
+        <div id="d-tabs-content"></div>
+      </div>
+    </div>
+  </div>
+  <div class="related">
+    <div class="related-hd">Altri modelli della collezione</div>
+    <div class="related-grid" id="d-related"></div>
+  </div>
+</div>
+
+<div class="zoom-ol" id="zoom" onclick="closeZoom()">
+  <button class="zoom-close" onclick="closeZoom()">✕</button>
+  <div class="zoom-content" id="zoom-content"></div>
+</div>
+
+<script>
+const MODELS = [
+  {id:1,cat:'nave',nome:'Nave Egizia',epoca:'1500 a.C.',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/100',Lunghezza:'28 cm',Tecnica:'Legno pieno',Anno:'1980',Disegno:'Vincenzo Lusci'},
+   desc:'Riproduce una delle navi della Regina Hatsepsowe (1508-1485 a.C.) destinata alle cerimonie religiose. Navigazione con grossa vela e remi. Ricca decorazione, anche della vela, che ha richiesto un lungo lavoro.'},
+  {id:2,cat:'nave',nome:'Nave Assiro Fenicia',epoca:'500 a.C.',emoji:'🚢',bg:'bg-nave',
+      fotos:[
+     'foto/fenicia/Fenicia_15.jpg',
+     'foto/fenicia/Fenicia_11.jpg',
+     'foto/fenicia/Fenicia_10.jpg',
+     'foto/fenicia/Fenicia_16.jpg',
+     'foto/fenicia/Fenicia_5.jpg',
+     'foto/fenicia/Fenicia_6.jpg',
+     'foto/fenicia/Fenicia_12.jpg',
+     'foto/fenicia/Fenicia_13.jpg'
+   ],
+   scheda:{Scala:'1/32',Lunghezza:'95 cm',Larghezza:'21 cm',Tecnica:'Legno pieno e listelli',Anno:'–',Disegno:'Vincenzo Lusci 1/65'},
+   tabs:[
+     {label:'Storia', testo:'I Fenici occupavano una sottile striscia di terra tra il Libano e il mare, lunga circa 300 km e larga meno di 50. Dapprima pirati, poi commercianti, seppero sfruttare le loro qualità marinare per divenire gli intermediari di tutti i mercati mediterranei. Arrivarono verso il 500 a.C. a disporre di bastimenti capaci di trasportare 200-250 tonnellate di merci.'},
+     {label:'Il modello', testo:'Ricavato da un disegno della Vincenzo Lusci in scala 1/65, ingrandito alla scala 1/32, con lunghezza totale di 95 cm e larghezza di 21 cm. Riproduce una nave da guerra dell\'ultima epoca fenicia, caratterizzata da albero a centro scafo con grande vela rettangolare. La struttura è in legno pieno per l\'opera viva e in listelli per la parte superiore.'},
+     {label:'Costruzione', testo:'Il fasciame superiore è stato realizzato a listello singolo. Il rostro rinforzato è in ottone. Sulle fiancate gli scudi dei rematori, le aperture per i remi su entrambi i lati. Rigging minimale come da documentazione storica dell\'epoca.'}
+   ],
+   desc:'Nave fenicia da guerra dell\'ultima epoca.'},
+  {id:3,cat:'nave',nome:'Nave Lunga Vichinga',epoca:'900 d.C.',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/35',Lunghezza:'70 cm',Tecnica:'Fasciame a clinker',Anno:'–',Disegno:'Vincenzo Lusci 1/50'},
+   desc:'Riproduce la nave recuperata a Gokstad, Norvegia, costruita attorno al 900. Caratterizzata da fasciame sovrapposto (clinker), tipico delle navi del Nord, con grossa vela quadra su albero centrale in quercia massiccia.'},
+  {id:4,cat:'nave',nome:'Nuestra Señora',epoca:'1409',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/70',Lunghezza:'90 cm',Tecnica:'Legno',Anno:'–',Disegno:'Vincenzo Lusci 1/100'},
+   desc:'Tipico Uxer catalano del XV secolo. Si riconoscono le incastellature di prua e di poppa, gli alberi con vela quadra e latina. Tra le navi più veloci dell\'epoca grazie alla combinazione di remi e vela.'},
+  {id:5,cat:'nave',nome:'Santa Maria',epoca:'1492',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/64',Lunghezza:'615 mm',Tecnica:'Scatola di montaggio',Produttore:'Graupner',Anno:'–'},
+   desc:'Riproduce la nave ammiraglia di Cristoforo Colombo nel primo viaggio verso l\'America. La nave era probabilmente un "nao" con spazio limitatissimo per l\'equipaggio.'},
+  {id:6,cat:'nave',nome:'Sao Miguel — Caracca Atlantica',epoca:'1495',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/54',Lunghezza:'843 mm',Altezza:'630 mm',Produttore:'Mamoli',Anno:'1982/1983'},
+   desc:'Caracca atlantica del XV secolo. Regalata al Prof. Alfredo Vago dopo un intervento chirurgico nel 1983. Grande nave da carico e da guerra con due o tre alberi, usata soprattutto da portoghesi e genovesi.'},
+  {id:7,cat:'nave',nome:'Revenge — Galeone',epoca:'1577',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/50',Lunghezza:'122 cm',Tecnica:'Doppio fasciame su ordinate',Anno:'1971',Disegno:'Vincenzo Lusci 1/100'},
+   desc:'Galeone elisabettiano della marina inglese, nave di Sir Francis Drake. Ricostruisce l\'originale verniciatura a colori sgargianti dell\'epoca con lo stemma reale inglese sullo specchio di poppa. Tecnica del doppio fasciame, identica alle navi originali.'},
+  {id:8,cat:'nave',nome:'Le Soleil Royal — Vascello',epoca:'1669',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/100',Pezzi:'2.300',Tecnica:'Plastica',Produttore:'Heller',Anno:'–'},
+   desc:'Poderoso vascello di 1° rango da 2.000 tonnellate, 108 cannoni, costruito nel 1669 a Brest. Considerata la più bella e potente nave di Luigi XIV. Modello in plastica molto dettagliato con imponente specchio di poppa decorato.'},
+  {id:9,cat:'nave',nome:'Cacafuego — Bombarda',epoca:'1679',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/50',Lunghezza:'120 cm',Tecnica:'Legno',Anno:'1970',Disegno:'Vincenzo Lusci 1/100'},
+   desc:'Nave bombarda spagnola del 1679, circa 300 tonnellate. Arricchita da numerosi accessori: cucina, buglioli, casse per le palle dei cannoni, scialuppe inclusa la barcaccia. Occupa un posto d\'onore nel soggiorno.'},
+  {id:10,cat:'nave',nome:'HMS Victory — Spaccato',epoca:'1765',emoji:'⚓',bg:'bg-nave',
+   scheda:{Scala:'1/98',Altezza:'715 mm',Lunghezza:'60 mm',Anno:'–'},
+   desc:'Spaccato alla sezione maestra dell\'HMS Victory, il vascello di Ammiraglio Nelson a Trafalgar. Riccamente dettagliato con interni, alberatura maestra, botti, barili e cannoni. La più antica nave da guerra intatta al mondo.'},
+  {id:11,cat:'nave',nome:'Alert — Schooner',epoca:'1818',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/22',Lunghezza:'89 cm',Larghezza:'20 cm',Tecnica:'Legno',Anno:'1980s/2018',Disegno:'Vincenzo Lusci 1/30'},
+   desc:'Schooner americano commissonato per la lotta al contrabbando costiero. Dotato di cannone girevole a 360° a centro nave. Scafo impostato negli anni \'80, ripreso e completato nel 2018. Oggi si trova a Villefranche sur Mer.'},
+  {id:12,cat:'nave',nome:'Lancia Baleniera',epoca:'1830',emoji:'🚣',bg:'bg-nave',
+   scheda:{Scala:'1/16',Lunghezza:'55 cm',Produttore:'Mantua Model',Anno:'–'},
+   desc:'Imbarcazione robusta a fasciame sovrapposto, con prua e poppa simili. Kit con legno pretagliato pregiato includeva tutti i dettagli: arpioni, mastelli con 200 m di fune, coltelli, secchielli e pagaie per avvicinarsi silenziosamente.'},
+  {id:13,cat:'nave',nome:'Marieville — Battello Mississippi',epoca:'1860',emoji:'🛳️',bg:'bg-nave',
+   scheda:{Scala:'1/68',Lunghezza:'102 cm',Larghezza:'23 cm',Tecnica:'Legno pieno',Anno:'1974',Disegno:'Lusci 1/100'},
+   desc:'Tipico battello a ruote dell\'epoca western. Premiato alla Mostra Mercato di Varenna 1989 come miglior modello dagli alunni delle scuole elementari. Scafo rettangolare con due ciminiere imponenti e grande ruota a poppa.'},
+  {id:14,cat:'nave',nome:'Scialuppa Titanic',epoca:'1912',emoji:'🚣',bg:'bg-nave',
+   scheda:{Scala:'1/35',Lunghezza:'285 mm',Larghezza:'95 mm',Altezza:'55 mm',Produttore:'Artesania Latina',Anno:'2010'},
+   desc:'Riproduce una delle 14 lance in legno del Titanic. Ogni lancia aveva remi, albero, vela, bussola, biscotti, coperte e giubbotti. Si trova a Villefranche sur Mer.'},
+  {id:15,cat:'nave',nome:'Santa Lucia — Leudo Siciliano',epoca:'fine 1800',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/21',Lunghezza:'920 mm',Altezza:'620 mm',Produttore:'Panart (base)',Anno:'2012'},
+   desc:'Secondo modello del leudo siciliano: kit ingrandito 1,41 volte. Scafo realizzato negli anni \'90, completato nel 2012. Ricchi dettagli: botti per il vino, remi, cassette per il pesce, griglia per cuocere il pescato. A Villefranche sur Mer.'},
+  {id:16,cat:'nave',nome:'M/S Ymer — Rimorchiatore',epoca:'1920',emoji:'🚢',bg:'bg-nave',
+   scheda:{Scala:'1/50',Lunghezza:'38 cm',Produttore:'Billing Boats',Anno:'–'},
+   desc:'Classico rimorchiatore a vapore del 1920. Forme compatte che esprimono potenza. Grande gancio per il cavo di traino su due archi in metallo, prua e poppa protette per spingersi contro le navi.'},
+  {id:17,cat:'nave',nome:'Le Camaret — Langoustier',epoca:'1920',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/35',Lunghezza:'52 cm',Altezza:'55 cm',Larghezza:'15 cm',Produttore:'Constructo',Anno:'2010'},
+   desc:'Langoustier bretone per la pesca dell\'aragosta. Prima sperimentazione delle tecniche di invecchiamento e sporcatura. Attrezzato con gabbie per le aragoste e boe di segnalazione. A Villefranche sur Mer.'},
+  {id:18,cat:'nave',nome:'Gorch Fock — Nave Scuola',epoca:'1933',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'~1/70 (da plastica 1/400)',Lunghezza:'87 cm',Tecnica:'Legno pieno',Anno:'1975'},
+   desc:'Veliero a tre alberi in acciaio, nave scuola della Kriegsmarine. Costruito senza disegni originali, riproduce il modello in plastica 1/400. Autoaffondata nel 1945, ripescata dai sovietici, oggi nave-museo a Wilhelmshaven come Gorch Foch I.'},
+  {id:19,cat:'nave',nome:'Arno X — Timossi Ferrari',epoca:'1953',emoji:'🏎️',bg:'bg-nave',
+   scheda:{Scala:'1/8',Lunghezza:'79 cm',Produttore:'AMATI Classic',Anno:'–'},
+   desc:'Il Timossi Ferrari Arno XI ha battuto il record mondiale di velocità per racer il 15 ottobre 1953 sul lago d\'Iseo: 241,708 km/h (record imbattuto nella categoria). Motore V12 Ferrari 375 F1 da 600 HP. Ora esposto al Museo Ferrari di Maranello.'},
+  {id:20,cat:'nave',nome:'Enduro 127 — Classe M',epoca:'1986',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/1',Lunghezza:'127 cm',Larghezza:'29 cm',Tecnica:'Ordinate e listelli',Anno:'1986'},
+   desc:'Barca a vela radiocommandata, prima esperienza con modello navigante. Scafo rinforzato con tessuto impregnato di resina. Vele da vecchie vele di windsurf. Dopo 35 anni sembra ancora pronta per entrare in acqua.'},
+  {id:21,cat:'nave',nome:'Lou Nissart — Pointu',epoca:'anni \'60',emoji:'⛵',bg:'bg-nave',
+   scheda:{Scala:'1/20',Lunghezza:'33,5 cm',Larghezza:'12 cm',Produttore:'AIR LOISIRS',Anno:'–'},
+   desc:'Tradizionale barca da pesca provenzale come quelle dei porti della Costa Azzurra. Arricchito con reti, boe di segnalazione, parabordi e cassette per il pesce.'},
+  {id:22,cat:'nave',nome:'Josephine — Chiatta Freycinet',epoca:'–',emoji:'🚢',bg:'bg-nave',
+   scheda:{Scala:'H0 1/87',Lunghezza:'45 cm',Tecnica:'Legno pieno',Anno:'2016'},
+   desc:'Chiatta tipo Freycinet per il plastico ferroviario in H0. La sagoma Freycinet (38,50 m × 5,05 m) era standard nei canali francesi. Ricordo di navigazioni sui canali francesi nel 1985-86.'},
+  {id:23,cat:'nave',nome:'Clyde Puffer — Nave Costiera',epoca:'–',emoji:'⚓',bg:'bg-nave',
+   scheda:{Scala:'H0 1/87',Lunghezza:'24 cm',Tecnica:'Legno pieno',Anno:'2016'},
+   desc:'Piccola nave da carico a carbone per le isole scozzesi. Fondo piatto per arenarsi e scaricare con la bassa marea. Per il plastico ferroviario in H0 con porto integrato.'},
+  {id:24,cat:'nave',nome:'Taol Vaen — Caseyeur',epoca:'–',emoji:'🚢',bg:'bg-nave',
+   scheda:{Scala:'1/51',Lunghezza:'33 cm',Tecnica:'Scafo con finestre',Anno:'–',Fonte:'MRB n°595 giugno 2013'},
+   desc:'Imbarcazione da pesca con nasse bretone. ~30 nasse realizzate e poste all\'interno. Apertura sulla fiancata di tribordo per gli argani idraulici. Modello non ancora completato — mancano le scritte e i palloni galleggianti.'},
+  {id:25,cat:'navmil',nome:'Raimondo Montecuccoli',epoca:'1934',emoji:'⚓',bg:'bg-navmil',
+   scheda:{Tipo:'Incrociatore leggero',Marina:'Regia Marina Italiana',Anno:'1958 circa'},
+   desc:'Incrociatore leggero varato il 2 agosto 1934. Sopravvissuto alla guerra, divenne nave scuola nel 1949. Ha circumnavigato il mondo nel 1956-57 a causa della crisi di Suez. Esposto in mostra al Collegio San Luigi di Intra nel 1958.'},
+  {id:26,cat:'navmil',nome:'Vittorio Veneto',epoca:'1940',emoji:'⚓',bg:'bg-navmil',
+   scheda:{Scala:'1/150',Lunghezza:'159 cm',Tecnica:'Legno pieno',Anno:'1978',Disegno:'Navimodel'},
+   desc:'Una delle più belle corazzate della Seconda Guerra Mondiale. 56 missioni di guerra, colpita tre volte. Verniciata nella mimetica a linee spezzate del 1943. Aerei imbarcati, cannoni, mitragliatrici, canotti: tutti autocostruiti.'},
+  {id:27,cat:'navmil',nome:'HMS Blake — Incrociatore',epoca:'1889',emoji:'⚓',bg:'bg-navmil',
+   scheda:{Scala:'1/100',Tecnica:'Legno pieno',Anno:'1976',Fonte:'Enc. Storia della Marina Fabbri'},
+   desc:'Incrociatore corazzato HMS Blake della marina inglese, varato nel 1889. Classici colori dell\'epoca: scafo nero, sovrastrutture bianche e ocra. Nave ammiraglia del North America and West Indies Squadron 1892-1895.'},
+  {id:28,cat:'navmil',nome:'USS Saucy — Corvetta',epoca:'1940',emoji:'⚓',bg:'bg-navmil',
+   scheda:{Scala:'1/72',Lunghezza:'88 cm',Tipo:'Classe Flower',Tecnica:'Plastica',Anno:'1978'},
+   desc:'Corvetta antisommergibili classe Flower. Varata come HMS Arabia, ceduta agli USA nel 1942 per scorta nei Caraibi. Modello in plastica ricco di dettagli, realizzato nel 1978.'},
+  {id:29,cat:'navmil',nome:'Aldebaran F590 — Caccia Scorta',epoca:'1943',emoji:'⚓',bg:'bg-navmil',
+   fotos:[
+     'foto/aldebaran/ALDEBARAN1.jpg',
+     'foto/aldebaran/ALDEBARAN2.jpg',
+     'foto/aldebaran/ALDEBARAN4.png',
+     'foto/aldebaran/ALDEBARAN5.jpg'
+   ],
+   scheda:{Scala:'1/100',Lunghezza:'94 cm',Tecnica:'Legno pieno',Anno:'1980',Disegno:'Franco Gay'},
+   tabs:[
+     {label:'Storia', testo:'I cacciatorpediniere di scorta DE (Destroyer Escort) nacquero nel 1942 quando la campagna sottomarina germanica minacciava seriamente il Regno Unito. Il DE 195 Thornhill era entrato in servizio nella marina americana nel 1943, partecipando alla guerra prima nell\'Atlantico e poi nel Pacifico.'},
+     {label:'Il modello', testo:'Riproduce il caccia italiano Aldebaran F590, ceduto alla Marina Italiana nel 1951 insieme ad altre due unità gemelle (Altair e Andromeda) all\'adesione dell\'Italia al Patto Atlantico. Radiato nel 1976. Realizzato nel 1980 in scala 1/100 su disegno di Franco Gay, lungo 94 cm con scafo in legno pieno.'},
+     {label:'Dettagli', testo:'Ricco di particolari autocostruiti: armamento antiaereo con cannoni da 76/50 mm, cannoni AA da 40/56 mm, mitragliere da 20/70 mm, porcospino antisommergibile, lanciabombe e scaricabombe. Equipaggio di 189 uomini nell\'originale.'}
+   ],
+   desc:'Cacciatorpediniere americano DE 195 Thornhill, ceduto alla Marina Italiana nel 1951.'},
+  {id:30,cat:'navmil',nome:'Surcouf D621 — Caccia Scorta',epoca:'1955',emoji:'⚓',bg:'bg-navmil',
+   scheda:{Scala:'1/100',Lunghezza:'128 cm',Produttore:'New Maquette',Anno:'1977 circa'},
+   desc:'Caccia di scorta francese tipo T47, in servizio 1955-1972. Spezzato in due per collisione con una petroliera sovietica nel 1971 al largo di Cartagena. Primo modello di questo tipo, realizzato ancora senza grande documentazione.'},
+  {id:31,cat:'navmil',nome:'Alpino F580 — Fregata',epoca:'1967',emoji:'⚓',bg:'bg-navmil',
+   fotos:[
+     'foto/alpino/ALPINO8.jpg',
+     'foto/alpino/ALPINO7.jpg',
+     'foto/alpino/ALPINO5.jpg',
+     'foto/alpino/ALPINO3.jpg',
+     'foto/alpino/ALPINO4.jpg'
+   ],
+   scheda:{Scala:'1/100',Lunghezza:'113 cm',Larghezza:'13,3 cm',Tecnica:'Legno pieno',Anno:'~1980',Disegno:'Navimodel'},
+   tabs:[
+     {label:'Storia', testo:'La fregata Alpino (codice ottico F580) fu impostata il 27 febbraio 1963, varata il 10 giugno 1967 e divenuta operativa il 14 gennaio 1968. Fu radiata il 31 marzo 2006 e demolita nel 2018. Costituiva una classe con la fregata Carabiniere F581.'},
+     {label:'Il modello', testo:'Realizzato in scala 1/100 su disegno Navimodel con scafo in legno pieno, lungo 113 cm e largo 13,3 cm. L\'elicottero AB 212 sulla piattaforma di poppa era un modellino del figlio Davide opportunamente adattato. All\'estrema poppa il sistema sonar rimorchiabile.'},
+     {label:'Dettagli', testo:'Armamento riprodotto fedelmente: 6 cannoni Oto Melara 76/62 con cadenza di 60 colpi/min, lanciabombe antisommergibili, 6 tubi lanciasiluri da 324 mm, 2 lanciarazzi da 105, piattaforma elicottero con hangar. Potenza motrice CODAG: 4 motori diesel Tosi e 2 turbine a gas da 31.800 HP complessivi.'}
+   ],
+   desc:'Fregata italiana Alpino F580 con piattaforma elicottero e ricco armamento antisommergibile.'},
+  {id:32,cat:'sbarco',nome:'LCI (L) — Nave da Sbarco Fanteria',epoca:'1941',emoji:'🚢',bg:'bg-sbarco',
+   scheda:{Scala:'1/72',Lunghezza:'68 cm',Larghezza:'10 cm',Tecnica:'Cartone + 3D',Anno:'2018-2019'},
+   desc:'Prototipo in cartone rivelatosi così solido da essere completato così. Prima volta con componenti disegnati e stampati in 3D, come i canotti salvagenti tipo Charley. Le due rampe anteriori si abbassano per la discesa dei soldati.'},
+  {id:33,cat:'sbarco',nome:'LCM (3) — Mezzo da Sbarco',epoca:'1942',emoji:'🚢',bg:'bg-sbarco',
+   scheda:{Scala:'1/72',Lunghezza:'21 cm',Tecnica:'Cartone',Anno:'2019'},
+   desc:'Il mezzo da sbarco più utilizzato per il trasporto carri armati. Trasportava un M4 Sherman da 30 t o 60 uomini. Sperimentazione della tecnica di invecchiamento e sporcatura con ottimi risultati.'},
+  {id:34,cat:'sbarco',nome:'LCT (5) — Nave da Sbarco Carri',epoca:'1942',emoji:'🚢',bg:'bg-sbarco',
+   scheda:{Scala:'1/72',Lunghezza:'49,5 cm',Tecnica:'Ordinate + compensato 1,5mm',Anno:'2020 (lockdown)'},
+   desc:'Costruita durante il lockdown Covid insieme alla versione LCT(6). Portellone, canotti e bidoni disegnati e stampati in 3D. Il modello integra diversi tipi di carri armati M4 Sherman che arricchiscono la scena.'},
+  {id:35,cat:'sbarco',nome:'LCT (6) — Nave da Sbarco Carri',epoca:'1942',emoji:'🚢',bg:'bg-sbarco',
+   scheda:{Scala:'1/72',Lunghezza:'~50 cm',Tecnica:'Ordinate + compensato 1,5mm',Anno:'2020'},
+   desc:'Versione evoluta dell\'LCT(5) con più dettagli nell\'armamento e argano salpa ancora posteriore. 3 pannelli amovibili a poppa per l\'accesso dei veicoli. Costruita contemporaneamente all\'LCT(5).'},
+  {id:36,cat:'sbarco',nome:'LSM — Nave da Sbarco Media',epoca:'1944',emoji:'🚢',bg:'bg-sbarco',
+   scheda:{Scala:'1/72',Tecnica:'Vetroresina + plastica 3D',Anno:'2019',Scafo:'regalo di Davide'},
+   desc:'Scafo in fibra di vetro trovato su sito inglese, regalato da Davide a Natale 2018. Impianto antincendio con 4 idranti doppi in rosso. I portelloni di sbarco non si chiudono perfettamente per un errore di progettazione.'},
+  {id:37,cat:'sbarco',nome:'T.103 — Nave da Sbarco Giapponese',epoca:'1943',emoji:'🚢',bg:'bg-sbarco',
+   scheda:{Scala:'1/72',Tecnica:'Cartone + parti 3D',Anno:'~2020'},
+   desc:'Landing Ship Tank giapponese da 950 t. Forma squadrata con due piani di carico collegati da rampa mobile. Carri armati giapponesi in scala 1/72 quasi introvabili, disegnati e stampati in 3D. Plancia di comando arredata internamente.'},
+  {id:38,cat:'sbarco',nome:'Motosilurante',epoca:'1961',emoji:'⚡',bg:'bg-sbarco',
+   scheda:{Tecnica:'Autocostruita',Anno:'1961'},
+   desc:'Primo contatto con la motosilurante: vista dal padre di un amico a Milano nel 1960. Era talmente bella da dover tornare a casa e costruirne una subito. Non aveva nulla a che fare con il modello visto, ma per me andava bene.'},
+  {id:39,cat:'sbarco',nome:'Motovedetta PC 404',epoca:'anni \'80',emoji:'⚡',bg:'bg-sbarco',
+   scheda:{Tecnica:'Kit',Anno:'inizio anni \'80'},
+   desc:'Primo modello navigante radiocomandato. Corvetta di difesa costiera con mitragliatrice a prua. All\'epoca non disponeva delle risorse per completarlo con radiocomando e motori.'},
+  {id:40,cat:'loco',nome:'Locomotiva Rocket',epoca:'1829',emoji:'🚂',bg:'bg-loco',
+   scheda:{Scala:'1/24',Lunghezza:'290 mm (415 con tender)',Larghezza:'65 mm',Altezza:'180 mm',Produttore:'Occre (Ocio Creativo)',Anno:'–'},
+   desc:'La locomotiva vincitrice del concorso di Rainhill del 1829. Prima locomotiva con caldaia tubolare e iniezione vapori di scarico nel camino. Trainava 30 passeggeri a 40 km/h. Protetta in teca di vetro.'},
+  {id:41,cat:'loco',nome:'Pacific 231 PLM 6001',epoca:'1909',emoji:'🚂',bg:'bg-loco',
+   scheda:{Scala:'1/20',Lunghezza:'78 cm (120 cm con tender)',Tecnica:'Fascicoli Peruzzo',Anno:'–'},
+   desc:'Locomotiva veloce francese PLM, serie più importante costruita per una società francese prima della SNCF: 462 unità. Operativa per quasi 60 anni. Il modello si trova in teca di vetro negli uffici della Delta Marketing.'},
+  {id:42,cat:'loco',nome:'Big Boy 4000',epoca:'1941',emoji:'🚂',bg:'bg-loco',
+   scheda:{Scala:'1/32',Lunghezza:'82 cm (125 cm con tender)',Tecnica:'Fascicoli Peruzzo',Anno:'–'},
+   desc:'Tra le locomotive più potenti mai costruite: 4.700 kW, rodiggio 4-8-8-4. 25 esemplari costruiti 1941-1944. Pensata per treni merci da 3.600 t sulle Wasatch Mountains. Il tender, mancante, porterebbe il totale a 1,25 m.'},
+  {id:43,cat:'loco',nome:'DRB Classe 52',epoca:'1942',emoji:'🚂',bg:'bg-loco',
+   scheda:{Scala:'1/35',Lunghezza:'80 cm',Produttore:'Trumpeter',Anno:'–'},
+   desc:'Kriegslokomotive: oltre 7.794 esemplari costruiti in tutta Europa per il fronte orientale. Versione semplificata della Classe 50. Gli enormi "schermi parafumo" laterali, mai visti sulle locomotive italiane, affascinano particolarmente.'},
+  {id:44,cat:'loco',nome:'Tramvia Blau — Barcellona',epoca:'1901',emoji:'🚃',bg:'bg-tram',
+   scheda:{Scala:'1/24',Lunghezza:'378 mm (415 con asta)',Larghezza:'110 mm',Altezza:'295 mm',Produttore:'Occre',Anno:'–'},
+   desc:'Il tram più antico d\'Europa ancora in esercizio. Riproduce la vettura n°5 del 1904, 48 viaggiatori, due motori da 45 CV, velocità massima 13,5 km/h. Tetto in legno e caratteristici colori blu. Protetto in teca di vetro.'},
+  {id:45,cat:'navmil',nome:'HMS Victory — Spaccato',epoca:'1765',emoji:'⚓',bg:'bg-navmil',
+   scheda:{Scala:'1/98',Altezza:'715 mm',Anno:'–'},
+   desc:'Spaccato alla sezione maestra con interni dettagliati, alberatura maestra, cannoni, botti e barili. La Victory è la più antica nave da guerra intatta al mondo, varata nel 1765.'},
+  {id:46,cat:'nave',nome:'Peschereccio d\'Alto Mare',epoca:'1976',emoji:'🐟',bg:'bg-nave',
+   scheda:{Scala:'–',Lunghezza:'~80 cm',Tecnica:'Legno pieno',Anno:'1976'},
+   desc:'Ispirato da una illustrazione in un libro del figlio Davide. Regalato all\'Asilo di Travedona nel 1979. Tipo di peschereccio giapponese di cui non si conosce il nome ufficiale.'},
+];
+
+const CAT_LABELS = {nave:'Nave',navmil:'Marina Militare',sbarco:'Mezzo da Sbarco',loco:'Locomotiva',tram:'Tram'};
+let currentFilter = 'tutti';
+let currentModel = null;
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('news-view').style.display = 'none';
+  document.getElementById('index-view').style.display = 'block';
+  document.getElementById('detail-view').style.display = 'none';
+  renderGrid();
+}
+
+function showNews(btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('index-view').style.display = 'none';
+  document.getElementById('detail-view').style.display = 'none';
+  document.getElementById('news-view').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function renderGrid() {
+  const naveAll = ['nave','navmil','sbarco'];
+  const treniAll = ['loco','tram'];
+  const visible = currentFilter === 'tutti' ? MODELS
+    : currentFilter === 'nave_all' ? MODELS.filter(m => naveAll.includes(m.cat))
+    : currentFilter === 'treni' ? MODELS.filter(m => treniAll.includes(m.cat))
+    : MODELS.filter(m => m.cat === currentFilter);
+  const grid = document.getElementById('main-grid');
+  grid.innerHTML = visible.map(m => `
+    <div class="card" onclick="openModel(${m.id})">
+      <div class="card-img-outer">
+        <div class="card-img-wrap ${m.bg}" style="overflow:hidden">${
+          (m.fotos && m.fotos[0] && (m.fotos[0].startsWith('foto/') || m.fotos[0].startsWith('http')))
+            ? '<img src="' + m.fotos[0] + '" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease" class="card-real-img">'
+            : m.emoji
+        }</div>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${CAT_LABELS[m.cat] || m.cat}</div>
+        <div class="card-name">${m.nome}</div>
+        <div class="card-meta">${m.epoca}</div>
+      </div>
+    </div>`).join('');
+  const labels = {tutti:'La collezione completa',nave_all:'Navi',treni:'Treni & Locomotive'};
+  document.getElementById('grid-title').textContent = labels[currentFilter] || 'La collezione';
+  document.getElementById('grid-count').textContent = visible.length + ' model' + (visible.length === 1 ? 'lo' : 'li');
+  document.getElementById('stat-tot').textContent = MODELS.length;
+}
+
+let currentPhotoIndex = 0;
+
+function openModel(id) {
+  const m = MODELS.find(x => x.id === id);
+  currentModel = m;
+  currentPhotoIndex = 0;
+
+  document.getElementById('d-cat').textContent = CAT_LABELS[m.cat] || m.cat;
+  document.getElementById('d-title').textContent = m.nome;
+  document.getElementById('d-epoch').textContent = m.epoca;
+
+  // Galleria: foto + eventuale video
+  const fotos = m.fotos || [m.emoji, m.emoji, m.emoji];
+  const video = m.video || null;
+  const total = fotos.length + (video ? 1 : 0);
+  renderPhoto(m, 0);
+  document.getElementById('d-counter').textContent = '1 / ' + total;
+
+  // Thumbs
+  const isPhotoUrl = f => f && (f.startsWith('foto/') || f.startsWith('http') || f.startsWith('/'));
+  let thumbsHtml = fotos.map((f,i) => {
+    const inner = isPhotoUrl(f)
+      ? '<img src="' + f + '" style="width:100%;height:100%;object-fit:cover;border-radius:1px">'
+      : '<span style="font-size:22px">' + f + '</span>';
+    return '<div class="thumb ' + (i===0?'active ':' ') + m.bg + '" data-idx="' + i + '" onclick="selectPhoto(' + id + ',' + i + ')">' + inner + '</div>';
+  }).join('');
+  if (video) {
+    thumbsHtml += `<div class="video-thumb-wrap" data-idx="${fotos.length}" onclick="selectPhoto(${id},${fotos.length})">
+      <div class="thumb ${m.bg}"></div>
+      <div class="play-btn"></div>
+      <div class="vid-label">VIDEO</div>
+    </div>`;
+  }
+  document.getElementById('d-thumbs').innerHTML = thumbsHtml;
+
+  // Scheda tecnica
+  const rows = Object.entries(m.scheda).map(([k,v]) =>
+    `<div class="scheda-row"><span class="sk">${k}</span><span class="sv">${v}</span></div>`).join('');
+  document.getElementById('d-scheda').innerHTML = rows;
+
+  // Tab descrizione
+  const tabs = m.tabs || [{label:'Descrizione', testo: m.desc}];
+  document.getElementById('d-tabs-bar').innerHTML = tabs.map((t,i) =>
+    `<button class="tab-btn ${i===0?'active':''}" onclick="selTab(${i},this)">${t.label}</button>`).join('');
+  document.getElementById('d-tabs-content').innerHTML = tabs.map((t,i) =>
+    `<div class="tab-pane ${i===0?'active':''}" id="tp${i}">${t.testo}</div>`).join('');
+
+  // Correlati
+  const others = MODELS.filter(x => x.id !== id).sort(() => Math.random()-0.5).slice(0,4);
+  document.getElementById('d-related').innerHTML = others.map(r =>
+    `<div class="rel-card" onclick="openModel(${r.id})">
+      <div class="rel-photo"><div class="rel-photo-inner ${r.bg}" style="overflow:hidden">${
+        (r.fotos && r.fotos[0] && (r.fotos[0].startsWith('foto/') || r.fotos[0].startsWith('http')))
+          ? '<img src="' + r.fotos[0] + '" style="width:100%;height:100%;object-fit:cover">'
+          : r.fotos ? r.fotos[0] : r.emoji
+      }</div></div>
+      <div class="rel-cat">${CAT_LABELS[r.cat]||r.cat}</div>
+      <div class="rel-name">${r.nome}</div>
+      <div class="rel-meta">${r.epoca}</div>
+    </div>`).join('');
+
+  document.getElementById('index-view').style.display = 'none';
+  document.getElementById('detail-view').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function renderPhoto(m, idx) {
+  const fotos = m.fotos || [m.emoji, m.emoji, m.emoji];
+  const video = m.video || null;
+  const total = fotos.length + (video ? 1 : 0);
+  const isVideo = video && idx === fotos.length;
+  const mainContent = document.getElementById('d-main-content');
+  const videoEl = document.getElementById('d-video');
+  const counter = document.getElementById('d-counter');
+
+  if (isVideo) {
+    mainContent.style.display = 'none';
+    videoEl.src = video;
+    videoEl.classList.add('active');
+  } else {
+    videoEl.classList.remove('active');
+    videoEl.src = '';
+    mainContent.style.display = '';
+    const f = fotos[idx];
+    const isUrl = f && (f.startsWith('http') || f.startsWith('foto/') || f.startsWith('/') || f.startsWith('.'));
+    if (isUrl) {
+      const img = document.createElement('img');
+      img.src = f;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:2px';
+      img.onerror = function() {
+        mainContent.innerHTML = '<span style="font-size:90px">' + m.emoji + '</span>';
+      };
+      mainContent.innerHTML = '';
+      mainContent.appendChild(img);
+    } else {
+      mainContent.innerHTML = '<span style="font-size:90px">' + (f || m.emoji) + '</span>';
+    }
+  }
+  counter.textContent = (idx+1) + ' / ' + total;
+  currentPhotoIndex = idx;
+}
+
+function selectPhoto(modelId, idx) {
+  const m = MODELS.find(x => x.id === modelId);
+  renderPhoto(m, idx);
+  document.querySelectorAll('#d-thumbs .thumb, #d-thumbs .video-thumb-wrap').forEach(el => {
+    const i = parseInt(el.dataset.idx);
+    el.classList.toggle('active', i === idx);
+  });
+}
+
+function navPhoto(dir) {
+  if (!currentModel) return;
+  const fotos = currentModel.fotos || [currentModel.emoji, currentModel.emoji, currentModel.emoji];
+  const total = fotos.length + (currentModel.video ? 1 : 0);
+  const next = (currentPhotoIndex + dir + total) % total;
+  selectPhoto(currentModel.id, next);
+}
+
+function selTab(i, el) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tp'+i).classList.add('active');
+}
+
+function showIndex() {
+  document.getElementById('index-view').style.display = 'block';
+  document.getElementById('detail-view').style.display = 'none';
+  document.getElementById('news-view').style.display = 'none';
+  // reset nav to Tutti
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  currentFilter = 'tutti';
+  renderGrid();
+  window.scrollTo(0,0);
+}
+
+function openZoom() {
+  if (!currentModel) return;
+  const fotos = currentModel.fotos || [];
+  const f = fotos[currentPhotoIndex];
+  const zc = document.getElementById('zoom-content');
+  const isUrl = f && (f.startsWith('foto/') || f.startsWith('http') || f.startsWith('/'));
+  if (isUrl) {
+    zc.innerHTML = '<img src="' + f + '" style="max-width:88vw;max-height:88vh;object-fit:contain;border-radius:2px">';
+  } else {
+    zc.innerHTML = '<span style="font-size:120px">' + (f || currentModel.emoji) + '</span>';
+  }
+  document.getElementById('zoom').classList.add('open');
+}
+function closeZoom() { document.getElementById('zoom').classList.remove('open'); }
+
+renderGrid();
+
+document.addEventListener('keydown', e => {
+  if (document.getElementById('detail-view').style.display === 'none') return;
+  if (e.key === 'ArrowLeft') navPhoto(-1);
+  if (e.key === 'ArrowRight') navPhoto(1);
+  if (e.key === 'Escape') { closeZoom(); }
+});
+</script>
+
+<div id="news-view" style="display:none; padding:0 40px 80px">
+  <div style="padding:64px 0 48px; max-width:680px">
+    <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;font-weight:500">Aggiornamenti</div>
+    <h1 style="font-family:var(--serif);font-size:clamp(36px,5vw,60px);font-weight:300;line-height:1.1;color:var(--dark);margin-bottom:12px">News</h1>
+    <p style="font-size:14px;color:var(--mid);font-weight:300;line-height:1.8;max-width:480px">Notizie, nuovi modelli in costruzione, partecipazioni a mostre e aggiornamenti dalla collezione.</p>
+  </div>
+  <div style="border-top:1px solid var(--border);padding-top:48px">
+    <div style="display:flex;flex-direction:column;gap:0">
+
+      <!-- POST SEGNAPOSTO 1 -->
+      <article style="display:grid;grid-template-columns:120px 1fr;gap:32px;padding:32px 0;border-bottom:1px solid var(--border);align-items:start">
+        <div style="font-family:var(--serif);color:var(--light)">
+          <div style="font-size:42px;font-weight:300;line-height:1">—</div>
+          <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;margin-top:4px">In attesa</div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">Primo aggiornamento</div>
+          <h2 style="font-family:var(--serif);font-size:26px;font-weight:300;color:var(--dark);margin-bottom:10px;line-height:1.2">Il sito è online</h2>
+          <p style="font-size:13px;color:var(--mid);line-height:1.85;font-weight:300">Benvenuti nel catalogo online della collezione <em>Modelli &amp; Passione</em>. Qui troverete tutti i modelli realizzati nel corso di quasi settant'anni, con fotografie, schede tecniche e racconti di costruzione. I contenuti saranno aggiornati progressivamente.</p>
+        </div>
+      </article>
+
+      <!-- POST SEGNAPOSTO 2 -->
+      <article style="display:grid;grid-template-columns:120px 1fr;gap:32px;padding:32px 0;border-bottom:1px solid var(--border);align-items:start">
+        <div style="font-family:var(--serif);color:var(--light)">
+          <div style="font-size:42px;font-weight:300;line-height:1">—</div>
+          <div style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;margin-top:4px">Prossimamente</div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">In costruzione</div>
+          <h2 style="font-family:var(--serif);font-size:26px;font-weight:300;color:var(--dark);margin-bottom:10px;line-height:1.2">Il prossimo post sarà qui</h2>
+          <p style="font-size:13px;color:var(--mid);line-height:1.85;font-weight:300">Questa sezione è pronta per accogliere notizie su nuovi modelli in lavorazione, mostre, eventi, o qualsiasi aggiornamento lei vorrà condividere con i visitatori.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
